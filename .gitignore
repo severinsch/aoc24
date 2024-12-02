@@ -1,0 +1,9 @@
+# don't upload inputs
+inputs/*
+
+.gradle
+.idea
+.kotlin/
+build
+src/**/*.txt
+local.properties
