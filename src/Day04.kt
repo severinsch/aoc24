@@ -3,8 +3,8 @@ import kotlin.math.floor
 fun main() {
     fun transpose(input: List<String>): List<String> {
         val res = input.first().indices.map { mutableListOf<Char>() }
-        for(line in input) {
-            for(j in line.indices) {
+        for (line in input) {
+            for (j in line.indices) {
                 res[j].addLast(line[j])
             }
         }
@@ -15,11 +15,11 @@ fun main() {
         val size = input.size + input.first().length
         val res = (1..size).map { mutableListOf<Char>() }
 
-        for(i in (input.size -1) downTo 0){
+        for (i in (input.size - 1) downTo 0) {
             val lengthOfDiagonal = input.size - i
             for (x in (1..lengthOfDiagonal)) {
-                res[i].addFirst(input[input.size-x][lengthOfDiagonal-x])
-                res[i+input.size].addFirst(input[lengthOfDiagonal-x][input.first().length-x])
+                res[i].addFirst(input[input.size - x][lengthOfDiagonal - x])
+                res[i + input.size].addFirst(input[lengthOfDiagonal - x][input.first().length - x])
             }
         }
         // drop the first element as the diagonal from corner to corner is included twice
@@ -30,8 +30,8 @@ fun main() {
         val regex = Regex("XMAS")
 
         fun checkHorizontal(board: List<String>): Int {
-            return board.sumOf {
-                line -> regex.findAll(line).count() + regex.findAll(line.reversed()).count()
+            return board.sumOf { line ->
+                regex.findAll(line).count() + regex.findAll(line.reversed()).count()
             }
         }
 
@@ -52,10 +52,11 @@ fun main() {
     fun part2(input: List<String>): Int {
 
         fun reorderDiagonals(diags: List<String>): List<String> {
-            val firstPartSize = floor(diags.size/2.0).toInt()
+            val firstPartSize = floor(diags.size / 2.0).toInt()
             val firstPart = diags.take(firstPartSize).reversed()
             return firstPart + diags.drop(firstPartSize)
         }
+
         val diagonalsLeftToRightUnordered = getDiagonals(input)
         // reorder diagonals to be sorted from lower left to upper right
         val diagonalsLeftToRight = reorderDiagonals(diagonalsLeftToRightUnordered)
@@ -71,10 +72,10 @@ fun main() {
             }
             return newDiags.mapIndexedNotNull { lineIndex, line ->
                 var startIndex = 0
-                val res = mutableListOf<Pair<Int,Int>>()
-                while(true){
+                val res = mutableListOf<Pair<Int, Int>>()
+                while (true) {
                     val idxM = line.indexOf(search, startIndex)
-                    if(idxM == -1) {
+                    if (idxM == -1) {
                         break
                     }
                     // all below is just calculating the index of the A in the given grid
@@ -84,22 +85,22 @@ fun main() {
                     var x: Int = idx
                     var y: Int = idx
 
-                    val xShift = if (leftToRight) lineIndex - diags.size/2 else diags.size/2 - lineIndex
-                    val yShift = if (leftToRight) diags.size/2 - lineIndex else lineIndex - diags.size/2
+                    val xShift = if (leftToRight) lineIndex - diags.size / 2 else diags.size / 2 - lineIndex
+                    val yShift = if (leftToRight) diags.size / 2 - lineIndex else lineIndex - diags.size / 2
                     // depending on whether diagonal is left to right or right to left, shift x for diagonals either below or above middle line
-                    val xShiftNecessary = if (leftToRight) lineIndex > diags.size/2 else lineIndex < diags.size/2
-                    val yShiftNecessary = if (leftToRight) lineIndex < diags.size/2 else lineIndex > diags.size/2
+                    val xShiftNecessary = if (leftToRight) lineIndex > diags.size / 2 else lineIndex < diags.size / 2
+                    val yShiftNecessary = if (leftToRight) lineIndex < diags.size / 2 else lineIndex > diags.size / 2
                     // e.g. for leftToRight, diagonals above middle line start at y=0 ==> no y shift
                     // but shift x depending on how far from x=0
-                    if(xShiftNecessary) {
+                    if (xShiftNecessary) {
                         x += xShift
                     }
-                    if(yShiftNecessary) {
+                    if (yShiftNecessary) {
                         // for leftToRight, diagonals below middle line start at x=0 => no x shift necessary
                         // but shift y
                         y += yShift
                     }
-                    if(!leftToRight) {
+                    if (!leftToRight) {
                         // for right to left, indices count from bottom up, to fit to coordinate system this is done
                         y = input.size - y - 1
                     }
@@ -112,8 +113,10 @@ fun main() {
         }
 
         // If the index of the found A in a LtoR diagonal is the same as the index of a found A in a RtoL diagonal, we have a X
-        val indicesLeftToRight = findIndicesOfA(diagonalsLeftToRight, "MAS", true) + findIndicesOfA(diagonalsLeftToRight, "SAM", true)
-        val indicesRightToLeft = findIndicesOfA(diagonalsRightToLeft, "MAS", false) + findIndicesOfA(diagonalsRightToLeft, "SAM", false)
+        val indicesLeftToRight =
+            findIndicesOfA(diagonalsLeftToRight, "MAS", true) + findIndicesOfA(diagonalsLeftToRight, "SAM", true)
+        val indicesRightToLeft =
+            findIndicesOfA(diagonalsRightToLeft, "MAS", false) + findIndicesOfA(diagonalsRightToLeft, "SAM", false)
 
         return indicesLeftToRight.count { indicesRightToLeft.contains(it) }
     }

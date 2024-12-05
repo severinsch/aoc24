@@ -15,8 +15,8 @@ fun main() {
     }
 
     fun part1(input: List<String>): Int {
-        return input.count {
-            line -> line.split(" ").map { it.toInt() }.let { checkReport(it) }
+        return input.count { line ->
+            line.split(" ").map { it.toInt() }.let { checkReport(it) }
         }
     }
 
@@ -28,8 +28,8 @@ fun main() {
                 checkReport(newReport)
             }
         }
-        return input.count {
-                line -> line.split(" ").map { it.toInt() }.let { checkReportWithDampener(it) }
+        return input.count { line ->
+            line.split(" ").map { it.toInt() }.let { checkReportWithDampener(it) }
         }
     }
 
