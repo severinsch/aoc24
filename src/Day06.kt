@@ -62,7 +62,7 @@ fun main() {
         var currentY = input.indexOfFirst { it.contains("^") }
         var currentX = input[currentY].indexOf('^')
         val visited: MutableSet<Triple<Int, Int, Direction>> = mutableSetOf()
-        var potentialObstaclePositions: MutableSet<Pair<Int, Int>> = mutableSetOf()
+        val potentialObstaclePositions: MutableSet<Pair<Int, Int>> = mutableSetOf()
 
         fun isNextOccupied(x: Int, y: Int, d: Direction, field: List<String> = input): Boolean {
             val (nextX, nextY) = getNext(x, y, d)
