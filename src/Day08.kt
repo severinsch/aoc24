@@ -22,19 +22,23 @@ fun main() {
     }
 
     // for part 2
-    fun calculateAntinodesAllDistances(s1: Pair<Int, Int>, s2: Pair<Int, Int>, input: List<String>): List<Pair<Int, Int>> {
+    fun calculateAntinodesAllDistances(
+        s1: Pair<Int, Int>,
+        s2: Pair<Int, Int>,
+        input: List<String>
+    ): List<Pair<Int, Int>> {
         val xDiff = s1.first - s2.first
         val yDiff = s1.second - s2.second
 
         val result = mutableListOf<Pair<Int, Int>>()
 
         var currentSpot = s1
-        while(isInField(currentSpot, input)) {
+        while (isInField(currentSpot, input)) {
             result.add(currentSpot)
             currentSpot = Pair(currentSpot.first + xDiff, currentSpot.second + yDiff)
         }
         currentSpot = s2
-        while(isInField(currentSpot, input)) {
+        while (isInField(currentSpot, input)) {
             result.add(currentSpot)
             currentSpot = Pair(currentSpot.first - xDiff, currentSpot.second - yDiff)
         }
@@ -56,7 +60,7 @@ fun main() {
                 if (s1 == s2) {
                     continue
                 }
-                val antinodes = if(allDistances) {
+                val antinodes = if (allDistances) {
                     calculateAntinodesAllDistances(s1, s2, input)
                 } else {
                     calculateAntinodes(s1, s2, input)
