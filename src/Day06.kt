@@ -35,7 +35,7 @@ fun main() {
 
         fun isNextOccupied(x: Int, y: Int, d: Direction): Boolean {
             val (nextX, nextY) = getNext(x, y, d)
-            if ((nextX !in (0..<sizeX)) or (nextY !in (0..<sizeY))) {
+            if ((nextX !in (0..<sizeX)) || (nextY !in (0..<sizeY))) {
                 return false
             }
             return input[nextY][nextX] == '#'
@@ -66,7 +66,7 @@ fun main() {
 
         fun isNextOccupied(x: Int, y: Int, d: Direction, field: List<String> = input): Boolean {
             val (nextX, nextY) = getNext(x, y, d)
-            if ((nextX !in (0..<sizeX)) or (nextY !in (0..<sizeY))) {
+            if ((nextX !in (0..<sizeX)) || (nextY !in (0..<sizeY))) {
                 return false
             }
             return field[nextY][nextX] == '#'
@@ -83,8 +83,7 @@ fun main() {
             var newX = x
             var newY = y
             while (newX in (0..<sizeX) && newY in (0..<sizeY)) {
-                if (Triple(newX, newY, newD) in visited || Triple(newX, newY, newD) in visitedAfterTurn) {
-                    println("Turning from ($x,$y) facing $d DOES enter loop")
+                if (Triple(newX, newY, newD) in visitedAfterTurn) {
                     return true
                 }
                 visitedAfterTurn.add(Triple(newX, newY, newD))
@@ -96,7 +95,6 @@ fun main() {
                 newX = nextX
                 newY = nextY
             }
-            println("Turning from ($x,$y) facing $d does not enter loop")
             return false
         }
 
@@ -108,12 +106,18 @@ fun main() {
             }
             val (nextX, nextY) = getNext(currentX, currentY, direction)
 
-            if ((nextX in (0..<sizeX)) and (nextY in (0..<sizeY))) {
-                if (Pair(nextX, nextY) !in potentialObstaclePositions) {
-                    // check if turning now would add a previous path
-                    if (checkIfTurnEntersLoop(currentX, currentY, direction)) {
-                        potentialObstaclePositions.add(Pair(nextX, nextY))
-                    }
+            if (
+                (nextX in (0..<sizeX)) && (nextY in (0..<sizeY))
+                // speedup
+                && (Pair(nextX, nextY) !in potentialObstaclePositions)
+                // don't place obstacle on starting position
+                && (input[nextY][nextX] == '.')
+                // if the obstacle would be on the path we did until here, we wouldn't have made it here
+                && Direction.entries.none { Triple(nextX, nextY, it) in visited }
+            ) {
+                // check if turning now would add a previous path
+                if (checkIfTurnEntersLoop(currentX, currentY, direction)) {
+                    potentialObstaclePositions.add(Pair(nextX, nextY))
                 }
             }
             currentX = nextX
