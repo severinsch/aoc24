@@ -33,6 +33,6 @@ fun main() {
 
     // Read the input from the `src/Day01.txt` file.
     val input = readInput("day01")
-    part1(input).println()
-    part2(input).println()
+    executeTimed(::part1, input)
+    executeTimed(::part2, input)
 }
