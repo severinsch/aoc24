@@ -20,15 +20,14 @@ fun main() {
             val type = if (i % 2 == 0) "DATA" else "FREE"
             Block(type, size, i / 2)
         }
-        val newFilesystem: MutableList<Int?> = blocks.flatMap { b ->
+        val newFilesystem = blocks.flatMap { b ->
             (0..<b.size).map {
                 if (b.isFree()) null else b.index
             }
-        }.toMutableList()
+        }.toTypedArray()
 
         for (i in newFilesystem.indices) {
-            val value = newFilesystem[i]
-            if (value != null) {
+            if (newFilesystem[i] != null) {
                 continue
             }
             val lastDataIdx = newFilesystem.indexOfLast { it != null }
@@ -74,7 +73,6 @@ fun main() {
                 if (b.isFree()) null else b.index
             }
         }.mapIndexedNotNull { i, e -> e?.times(i.toLong()) }.sum()
-
     }
 
     val input = readInput("day09")
